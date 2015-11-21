@@ -325,5 +325,6 @@ mod tests {
                         4, 3, 1, 0, 0];
         let peaks = detect_peaks(data, 2, 15, 255);
         assert_eq!(1, peaks.len());
+        assert_eq!(195, peaks[0].amplitude);
     }
 }
