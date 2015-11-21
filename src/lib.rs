@@ -161,7 +161,11 @@ impl<T> PeakDetector<T> where T: Copy + fmt::Display + PartialOrd + ToPrimitive 
                 }
                 State::Descending(n, index) => {
                     if slope > 0 {
-                        state = State::Ascending(1);
+                        if n == 0 {
+                            state = State::Descending(0, i);
+                        } else {
+                            state = State::Ascending(1);
+                        }
                     } else if n + 1 == self.width {
                         let amplitude = data[index];
                         if amplitude > self.floor && amplitude <= self.ceiling {
@@ -198,6 +202,11 @@ impl<T> PeakDetector<T> where T: Copy + fmt::Display + PartialOrd + ToPrimitive 
                    sample,
                    slope,
                    state);
+            println!("({}) sample={}, slope={}, state={:?}",
+                     i,
+                     sample,
+                     slope,
+                     state);
         }
         peaks
     }
@@ -313,5 +322,13 @@ mod tests {
         let detector = PeakDetector::new(3, 1, 8).max_kurtosis(-2.0);
         let peaks = detector.detect_peaks(&[1u32, 2, 3, 4, 3, 2, 1]);
         assert_eq!(0, peaks.len());
+    }
+
+    #[test]
+    fn should_be_one_peak() {
+        let ref data = [2u16, 2, 1, 2, 5, 18, 51, 107, 166, 195, 176, 125, 70, 34, 14, 7, 5, 4, 5,
+                        4, 3, 1, 0, 0];
+        let peaks = detect_peaks(data, 2, 15, 255);
+        assert_eq!(1, peaks.len());
     }
 }
