@@ -202,11 +202,6 @@ impl<T> PeakDetector<T> where T: Copy + fmt::Display + PartialOrd + ToPrimitive 
                    sample,
                    slope,
                    state);
-            println!("({}) sample={}, slope={}, state={:?}",
-                     i,
-                     sample,
-                     slope,
-                     state);
         }
         peaks
     }
