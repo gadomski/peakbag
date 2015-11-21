@@ -83,11 +83,11 @@ impl<T: Copy> PeakDetector<T> {
     ///
     /// ```
     /// use peakbag::PeakDetector;
-    /// let mut detector = PeakDetector::new(1, 2, 3);
-    /// detector.set_saturation(3);
+    /// let mut detector = PeakDetector::new(1, 2, 3).saturation(3);
     /// ```
-    pub fn set_saturation(&mut self, saturation: T) {
+    pub fn saturation(mut self, saturation: T) -> PeakDetector<T> {
         self.saturation = Some(saturation);
+        self
     }
 
     /// Sets the minimum allowable height above background for a peak.
@@ -96,11 +96,13 @@ impl<T: Copy> PeakDetector<T> {
     ///
     /// ```
     /// use peakbag::PeakDetector;
-    /// let mut detector = PeakDetector::new(1, 2, 3);
-    /// detector.set_min_height_above_background(4.0);
+    /// let mut detector = PeakDetector::new(1, 2, 3).min_height_above_background(4.0);
     /// ```
-    pub fn set_min_height_above_background(&mut self, min_height_above_background: f64) {
+    pub fn min_height_above_background(mut self,
+                                       min_height_above_background: f64)
+                                       -> PeakDetector<T> {
         self.min_height_above_background = min_height_above_background;
+        self
     }
 
     /// Sets the maximum allowable kurtosis for a peak.
@@ -109,11 +111,11 @@ impl<T: Copy> PeakDetector<T> {
     ///
     /// ```
     /// use peakbag::PeakDetector;
-    /// let mut detector = PeakDetector::new(1, 2, 3);
-    /// detector.set_max_kurtosis(4.0);
+    /// let detector = PeakDetector::new(1, 2, 3).max_kurtosis(4.0);
     /// ```
-    pub fn set_max_kurtosis(&mut self, max_kurtosis: f64) {
+    pub fn max_kurtosis(mut self, max_kurtosis: f64) -> PeakDetector<T> {
         self.max_kurtosis = max_kurtosis;
+        self
     }
 }
 
@@ -284,8 +286,7 @@ mod tests {
 
     #[test]
     fn saturation() {
-        let mut detector = PeakDetector::new(3, 1, 8);
-        detector.set_saturation(8);
+        let detector = PeakDetector::new(3, 1, 8).saturation(8);
         let peaks = detector.detect_peaks(&[5u32, 6, 7, 8, 7, 6, 5]);
         assert_eq!(0, peaks.len());
     }
@@ -302,16 +303,14 @@ mod tests {
 
     #[test]
     fn min_height_above_background() {
-        let mut detector = PeakDetector::new(3, 1, 8);
-        detector.set_min_height_above_background(4.0);
+        let detector = PeakDetector::new(3, 1, 8).min_height_above_background(4.0);
         let peaks = detector.detect_peaks(&[1u32, 2, 3, 4, 3, 2, 1]);
         assert_eq!(0, peaks.len());
     }
 
     #[test]
     fn peak_kurtosis() {
-        let mut detector = PeakDetector::new(3, 1, 8);
-        detector.set_max_kurtosis(-2.0);
+        let detector = PeakDetector::new(3, 1, 8).max_kurtosis(-2.0);
         let peaks = detector.detect_peaks(&[1u32, 2, 3, 4, 3, 2, 1]);
         assert_eq!(0, peaks.len());
     }
