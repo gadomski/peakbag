@@ -232,7 +232,7 @@ impl<T> PeakDetector<T> where T: Copy + fmt::Display + PartialOrd + ToPrimitive 
     fn height_above_background(&self, data: &[T], index: usize) -> f64 {
         let slope: f64 = (data[index + self.width].to_f64().unwrap() - data[index - self.width].to_f64().unwrap()) /
                          (2.0 * self.width as f64);
-        let intercept = data[index + self.width].to_f64().unwrap() -
+        let intercept = data[index - self.width].to_f64().unwrap() -
                         slope * (index - self.width) as f64;
         data[index].to_f64().unwrap() - (slope * index as f64 + intercept)
     }
@@ -332,5 +332,14 @@ mod tests {
     fn fix_arithmatic_overflow() {
         let ref data = [3u16, 3, 2, 1, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 4, 15, 50, 119, 194, 243, 255, 255, 217, 158, 97, 54, 30, 23, 20, 20, 18, 19, 20, 19, 17, 15, 13, 11, 12, 11, 10, 10, 10, 9, 10, 10, 10, 9, 11, 14, 27, 47, 66, 69, 54, 34, 19, 12, 9, 8, 7, 8, 12, 18, 28, 35, 34, 26, 16, 11, 15, 33, 64, 94, 105, 89, 58, 30, 14, 9, 7, 7, 7, 9, 9, 9, 7, 6, 5, 5, 6, 6, 6, 6, 5, 5, 4, 3, 4, 4];
         let _ = detect_peaks(data, 3, 15, 250);
+    }
+
+    #[test]
+    fn reference_pulse_not_one_peak() {
+        let ref data = [2u16, 1, 2, 2, 2, 1, 4, 10, 32, 80, 140, 188, 188, 149, 93, 47, 21, 9, 4,
+                        4, 5, 5, 3, 1];
+        let detector = PeakDetector::new(2, 15, 255).min_height_above_background(5.0);
+        let peaks = detector.detect_peaks(data);
+        assert_eq!(1, peaks.len());
     }
 }
