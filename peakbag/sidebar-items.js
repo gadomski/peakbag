@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["detect_peaks","Detects peaks in full waveform data."]],"struct":[["Peak","A peak in the waveform data."],["PeakDetector","Configurable struct for detecting peaks."]]});
