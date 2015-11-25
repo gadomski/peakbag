@@ -2,6 +2,13 @@
 name = "peakbag"
 version = "0.1.0"
 authors = ["Pete Gadomski <pete.gadomski@gmail.com>"]
+description = "Full waveform LiDAR processing, including peak detection"
+documentation = "http://gadomski.github.io/peakbag"
+homepage = "https://github.com/gadomski/peakbag"
+repository = "https://github.com/gadomski/peakbag.git"
+readme = "README.md"
+keywords = ["pointcloud", "LiDAR", "full-waveform", "peak-detection"]
+license = "MIT"
 
 [dependencies]
 log = "0.3"
